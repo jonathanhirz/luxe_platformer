@@ -1,0 +1,27 @@
+{
+  project : {
+    name : 'plat',
+    version : '0.0.1',
+    author : 'Jonathan Hirz',
+
+    app : {
+      name : 'plat',
+      package : 'com.jonathanhirz.plat'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+        pmi : '*'
+      },
+      hxcpp : {
+        flags : ['-nocolor']
+      }
+    },
+
+    files : {
+      config : 'config.json',
+      assets : 'assets/'
+    }
+  }
+}
