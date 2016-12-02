@@ -2,12 +2,20 @@ package states;
 
 import luxe.States;
 import luxe.Vector;
+import luxe.Color;
+import luxe.Sprite;
 import luxe.tilemaps.Tilemap;
 
 import pmi.PyxelMapImporter;
 import pmi.LuxeHelper;
 
+import component.PlayerControls;
+
 class GameState extends State {
+
+    var player : Sprite;
+    var tilemap : Tilemap;
+    var map_scale : Int = 1;
 
     public function new( _name:String ) {
         super({ name:_name });
@@ -24,6 +32,9 @@ class GameState extends State {
         Luxe.camera.center = new Vector(120, 124);
 
         create_tilemap();
+        create_player();
+        create_bounds();
+        create_oneway_bounds();
 
     } //onenter
 
@@ -34,6 +45,7 @@ class GameState extends State {
 
     override function update( dt:Float ) {
 
+        Luxe.camera.center.weighted_average_xy(player.pos.x, player.pos.y, 5);
 
     } //update
 
@@ -41,7 +53,7 @@ class GameState extends State {
 
         // load tilemap
         var pyxelmap = new PyxelMapImporter(Luxe.resources.text('assets/map_01_outside.xml').asset.text);
-        var tilemap = LuxeHelper.getTilemap('assets/tiles.png');
+        tilemap = LuxeHelper.getTilemap('assets/tiles.png');
         var base = pyxelmap.getDatasFromLayer('base');
         var decoration = pyxelmap.getDatasFromLayer('decoration');
         var collision = pyxelmap.getDatasFromLayer('collision');
@@ -58,5 +70,35 @@ class GameState extends State {
         tilemap.display({});
 
     } //create_tilemap
+
+    function create_player() {
+
+        player = new Sprite({
+            size : new Vector(16, 16),
+            color : new Color().rgb(0x430f7c),
+            pos : new Vector(32, 32),
+            depth : 1
+        });
+
+        player.add(new PlayerControls());
+
+    } //create_player
+
+    function create_bounds() {
+
+        var bounds = tilemap.layer('collision').bounds_fitted();
+        for(bound in bounds) {
+            bound.x *= tilemap.tile_width * map_scale;
+            bound.y *= tilemap.tile_height * map_scale;
+            bound.w *= tilemap.tile_width * map_scale;
+            bound.h *= tilemap.tile_height * map_scale;
+        }
+
+    } //create_bounds
+
+    function create_oneway_bounds() {
+
+
+    } //create_oneway_bounds
 
 } //GameState

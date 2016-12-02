@@ -14,7 +14,7 @@ basic todo list:
     + sky
     + collision red
 + draw tiled map, larger than screen size (to be scrolled)
-- get tiled map showing up in game
++ get tiled map showing up in game
 - collision bounds in array
 - simple player sprite on screen, able to move
 - camera follows player
